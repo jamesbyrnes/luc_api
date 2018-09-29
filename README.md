@@ -46,7 +46,7 @@ This app has two endpoints:
 * Returned MIME type: `application/json`
 * Returned data: Restructured schema for the specified email provider.
 
-`POST /api/v1/bounced-email: Add an email to a "do not send" blacklist.
+`POST /api/v1/bounced-email`: Add an email to a "do not send" blacklist.
 
 * Required MIME type: `application/json`
 * Required schema: `email_address` (string value)
