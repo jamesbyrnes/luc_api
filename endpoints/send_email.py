@@ -3,7 +3,7 @@ from sqlite3 import Error as SqlError
 
 from models.blacklist import Blacklist
 from integrations.email import EmailIntegrationFactory
-from settings import settings
+from wrappers import settings
 
 __required_fields = ['to', 'from', 'subject', 'body_text', 'body_html']
 settings = settings.get_settings()

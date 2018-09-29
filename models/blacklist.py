@@ -1,38 +1,31 @@
-import sqlite3
+from wrappers.sql import SqlWrapper
 
 class Blacklist:
     TARGET_PATH = './api_data.db'
 
     def __init__(self):
-        with sqlite3.connect(Blacklist.TARGET_PATH) as conn:
-            cursor = conn.cursor()
-            cursor.execute('''CREATE TABLE IF NOT EXISTS blacklist
+        with SqlWrapper(Blacklist.TARGET_PATH) as db_cur:
+            db_cur.execute('''CREATE TABLE IF NOT EXISTS blacklist
                 (id INTEGER PRIMARY KEY AUTOINCREMENT, 
                 email_address TEXT NOT NULL UNIQUE);''')
-            conn.commit()
 
     def get_all(self):
-        with sqlite3.connect(Blacklist.TARGET_PATH) as conn:
-            cursor = conn.cursor()
-            cursor.execute('''SELECT * FROM blacklist;''')
-            return cursor.fetchall()
+        with SqlWrapper(Blacklist.TARGET_PATH) as db_cur:
+            db_cur.execute('''SELECT * FROM blacklist;''')
+            return db_cur.fetchall()
 
     def get_by_email(self, email_address):
-        with sqlite3.connect(Blacklist.TARGET_PATH) as conn:
-            cursor = conn.cursor()
-            cursor.execute('''SELECT * FROM blacklist
+        with SqlWrapper(Blacklist.TARGET_PATH) as db_cur:
+            db_cur.execute('''SELECT * FROM blacklist
                 WHERE email_address = ?;''', [email_address])
-            return cursor.fetchone()
+            return db_cur.fetchone()
 
     def is_on_blacklist(self, email_address):
         return self.get_by_email(email_address) is not None
 
     def add_email(self, email_address):
-        with sqlite3.connect(Blacklist.TARGET_PATH) as conn:
-            cursor = conn.cursor()
-            cursor.execute('''INSERT INTO blacklist(email_address)
+        with SqlWrapper(Blacklist.TARGET_PATH) as db_cur:
+            db_cur.execute('''INSERT INTO blacklist(email_address)
                 VALUES (?);''', [email_address])
-            last_row = cursor.lastrowid
-            conn.commit()
-
+            last_row = db_cur.lastrowid
         return last_row
